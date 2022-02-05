@@ -1,5 +1,5 @@
-import express from 'express';
-import bodyParser from "body-parser";
+import * as express from 'express';
+import * as bodyParser from "body-parser";
 import TuitController from './controllers/TuitController';
 
 import UserController from './controllers/UserController';
@@ -23,9 +23,9 @@ app.use(bodyParser.json())
 const userController = new UserController(app, new UserDao());
 const tuitController = new TuitController(app, new TuitDao());
 
-const PORT = 4000;
-app.listen(process.env.PORT || PORT);
+//const PORT = 4000;
+app.listen(process.env.PORT);
 
-app.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}`)
-);
+// app.listen(PORT, () =>
+//   console.log(`Server running on port ${PORT}`)
+// );

@@ -17,8 +17,8 @@ var app = express();
 app.use(bodyParser.json());
 var userController = new UserController_1["default"](app, new UserDao_1["default"]());
 var tuitController = new TuitController_1["default"](app, new TuitDao_1["default"]());
-var PORT = 4000;
-app.listen(process.env.PORT || PORT);
-app.listen(PORT, function () {
-    return console.log("Server running on port ".concat(PORT));
-});
+//const PORT = 4000;
+app.listen(process.env.PORT);
+// app.listen(PORT, () =>
+//   console.log(`Server running on port ${PORT}`)
+// );
