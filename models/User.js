@@ -1,0 +1,23 @@
+"use strict";
+exports.__esModule = true;
+var AccountType_1 = require("./AccountType");
+var MaritalStatus_1 = require("./MaritalStatus");
+var User = /** @class */ (function () {
+    function User() {
+        this.username = '';
+        this.password = '';
+        this.firstName = null;
+        this.lastName = null;
+        this.email = '';
+        this.profilePhoto = null;
+        this.headerImage = null;
+        this.accountType = AccountType_1["default"].Personal;
+        this.maritalStatus = MaritalStatus_1["default"].Single;
+        this.biography = null;
+        this.dateOfBirth = null;
+        this.joined = new Date();
+        this.location = null;
+    }
+    return User;
+}());
+exports["default"] = User;
