@@ -14,7 +14,7 @@
  * service
  */
  import {Request, Response} from 'express';
- import * as express from 'express';
+ import express from 'express';
  import UserController from "./controllers/UserController";
  import TuitController from "./controllers/TuitController";
  import LikeController from "./controllers/LikeController";
