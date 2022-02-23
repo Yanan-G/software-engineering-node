@@ -1,40 +1,59 @@
-import express from 'express';
-import bodyParser from "body-parser";
+/**
+ * @file Implements an Express Node HTTP server. Declares RESTful Web services
+ * enabling CRUD operations on the following resources:
+ * <ul>
+ *     <li>users</li>
+ *     <li>tuits</li>
+ *     <li>likes</li>
+ *     <li>follows</li>
+ *     <li>messages</li>
+ *     <li>bookmarks</li>
+ * </ul>
+ * 
+ * Connects to a remote MongoDB instance hosted on the Atlas cloud database
+ * service
+ */
+ import {Request, Response} from 'express';
+ import * as express from 'express';
+ import UserController from "./controllers/UserController";
+ import TuitController from "./controllers/TuitController";
+ import LikeController from "./controllers/LikeController";
+ import FollowController from './controllers/FollowController';
+ import MessageController from './controllers/MessageController';
+ import BookmarkController from './controllers/BookmarkController';
+ const mongoose = require('mongoose');
+ 
+ // build the connection string
+ const PROTOCOL = "mongodb+srv";
+ const DB_USERNAME = process.env.DB_USERNAME;
+ const DB_PASSWORD = process.env.DB_PASSWORD;
+ const HOST = "cluster0.qnk2y.mongodb.net";
+ const DB_NAME = "myFirstDatabase";
+ const DB_QUERY = "retryWrites=true&w=majority";
+ const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;
+ // connect to the database
+ mongoose.connect(connectionString);
+ 
+ const app = express();
+ app.use(express.json());
+ 
+ app.get('/', (req: Request, res: Response) =>
+     res.send('Welcome!'));
+ 
+ app.get('/add/:a/:b', (req: Request, res: Response) =>
+     res.send(req.params.a + req.params.b));
+ 
+ // create RESTful Web service API
+ const userController = UserController.getInstance(app);
+ const tuitController = TuitController.getInstance(app);
+ const likesController = LikeController.getInstance(app);
+ const followController = FollowController.getInstance(app);
+ const messageController = MessageController.getInstance(app);
+ const bookmarkController = BookmarkController.getInstance(app);
 
-import TuitController from './controllers/TuitController';
-import UserController from './controllers/UserController';
-import TuitDao from './daos/TuitDao';
-import UserDao from './daos/UserDao';
-
-const mongoose = require('mongoose');
-
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-};
-// Connect to database
-connectDB();
-
-const app = express();
-
-// Body parser
-app.use(bodyParser.json())
-
-const userController = new UserController(app, new UserDao());
-const tuitController = new TuitController(app, new TuitDao());
-
-//const PORT = 4000;
-app.listen(process.env.PORT);
-
-// app.listen(PORT, () =>
-//   console.log(`Server running on port ${PORT}`)
-// );
+ /**
+  * Start a server listening at port 4000 locally
+  * but use environment variable PORT on Heroku if available.
+  */
+ const PORT = 4000;
+ app.listen(process.env.PORT || PORT);

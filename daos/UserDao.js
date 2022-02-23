@@ -36,60 +36,94 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var UserModel_1 = require("../mongoose/UserModel");
+/**
+ * @file Implements DAO managing data storage of users. Uses mongoose UserModel
+ * to integrate with MongoDB
+ */
+var UserModel_1 = require("../mongoose/users/UserModel");
+/**
+ * @class UserDao Implements Data Access Object managing data storage
+ * of Users
+ * @property {UserDao} userDao Private single instance of UserDao
+ */
 var UserDao = /** @class */ (function () {
     function UserDao() {
+        var _this = this;
+        /**
+         * Uses UserModel to retrieve all user documents from users collection
+         * @returns Promise To be notified when the users are retrieved from
+         * database
+         */
+        this.findAllUsers = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].find().exec()];
+        }); }); };
+        /**
+         * Uses UserModel to retrieve single user document from users collection
+         * @param {string} uid User's primary key
+         * @returns Promise To be notified when user is retrieved from the database
+         */
+        this.findUserById = function (uid) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].findById(uid)];
+        }); }); };
+        /**
+         * Inserts user instance into the database
+         * @param {User} user Instance to be inserted into the database
+         * @returns Promise To be notified when user is inserted into the database
+         */
+        this.createUser = function (user) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].create(user)];
+        }); }); };
+        /**
+         * Updates user with new values in database
+         * @param {string} uid Primary key of user to be modified
+         * @param {User} user User object containing properties and their new values
+         * @returns Promise To be notified when user is updated in the database
+         */
+        this.updateUser = function (uid, user) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, UserModel_1["default"].updateOne({ _id: uid }, { $set: user })];
+            });
+        }); };
+        this.updateUserSalaryByUsername = function (username, salary) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, UserModel_1["default"].updateOne({ username: username }, { $set: { salary: salary } })];
+            });
+        }); };
+        /**
+         * Removes user from the database.
+         * @param {string} uid Primary key of user to be removed
+         * @returns Promise To be notified when user is removed from the database
+         */
+        this.deleteUser = function (uid) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].deleteOne({ _id: uid })];
+        }); }); };
+        /**
+         * Removes all users from the database. Useful for testing
+         * @returns Promise To be notified when all users are removed from the
+         * database
+         */
+        this.deleteAllUsers = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].deleteMany({})];
+        }); }); };
+        this.findUserByCredentials = function (username, password) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].findOne({ username: username, password: password })];
+        }); }); };
+        this.findUserByUsername = function (username) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, UserModel_1["default"].findOne({ username: username })];
+        }); }); };
     }
-    UserDao.prototype.findAllUsers = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserModel_1["default"].find()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    UserDao.prototype.findUserById = function (userId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserModel_1["default"].findById(userId)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    UserDao.prototype.createUser = function (user) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserModel_1["default"].create(user)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    UserDao.prototype.deleteUser = function (userId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserModel_1["default"].deleteOne({ _id: userId })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    UserDao.prototype.updateUser = function (userId, user) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserModel_1["default"].updateOne({ _id: userId }, { $set: user })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
+    UserDao.userDao = null;
+    /**
+     * Creates singleton DAO instance
+     * @returns UserDao
+     */
+    UserDao.getInstance = function () {
+        if (UserDao.userDao === null) {
+            UserDao.userDao = new UserDao();
+        }
+        return UserDao.userDao;
     };
     return UserDao;
 }());
 exports["default"] = UserDao;
+;
