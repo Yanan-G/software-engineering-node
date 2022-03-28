@@ -40,14 +40,13 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
-const SECRET = 'process.env.SECRET';
 let sess = {
-    secret: SECRET,
-    saveUninitialized: true,
-    resave: true,
-    cookie: {
-        secure: false
-    }
+	secret: process.env.SECRET,
+	proxy: true,
+	cookie: {
+		secure: true,
+		sameSite: 'none'
+	}
 }
 
 if (process.env.ENVIRONMENT === 'PRODUCTION') {
